@@ -1,0 +1,48 @@
+﻿@model bludata.entity.Bludata.Cliente
+
+@{
+    Layout = null;
+}
+<div class="container" ng-controller="ClienteController">
+    <form name="FrmCliente">
+        <div class="panel panel-warning" ng-show="err.message !== undefined">
+            <div class="panel-heading">{{err.title}}</div>
+            <div class="panel-body">{{err.message}}</div>
+        </div>
+        <h4>Cadastro de Clientes</h4>
+        <hr />
+        {{$scope.validar()}}
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.ClienteNome, htmlAttributes: new { @class = "input-group-addon" })
+                <input type="text" ng-model="dados.clienteNome" class="form-control" maxlength="64" placeholder="Nome do Cliente" required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.ClienteCnpj, htmlAttributes: new { @class = "input-group-addon" })
+                <input type="tel" ng-model="dados.clienteCnpj" class="form-control cnpj" maxlength="20" placeholder="CNPJ" ng-required="true" ng-change="mudarCnpj()" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.UfCodigo, htmlAttributes: new { @class = "input-group-addon" })
+                <select class="form-control" ng-model="dados.ufCodigo" @*ng-options="item.ufCodigo as item.ufNome for item in (UF | ufsClientes) track by item.ufCodigo"*@ ng-required="true">
+                    <option value="">-- SELECIONE --</option>
+                    <option ng-repeat="item in (UF | ufsClientes)" value="{{item.ufCodigo}}" ng-selected="item.ufCodigo == dados.ufCodigo">{{item.ufNome}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button class="btn btn-success" ng-if="dados.clienteCodigo === undefined" ng-click="cadastrar()">Salvar</button>
+                <button class="btn btn-primary" ng-if="dados.clienteCodigo !== undefined" ng-click="alterar()">Alterar</button>
+            </div>
+        </div>
+    </form>
+    @*<button ng-click="carregar()">clicar</button>*@
+</div>
+@*<script src="~/Sscripts/view/Cliente/config-angular.js"></script>*@
+<script src="~/Scripts/view/Cliente/config-jquery.js"></script>

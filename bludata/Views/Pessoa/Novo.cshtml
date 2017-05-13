@@ -1,0 +1,102 @@
+﻿@model bludata.entity.Bludata.Pessoa
+
+@{
+    Layout = null;
+}
+
+<div class="container" ng-controller="CadastrarController" style="max-width: 484px">
+    <form name="FrmPessoa" id="FrmPessoa">
+        <h4>Cadastro de Pessoas</h4>
+        <hr />
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.PessoaNome, htmlAttributes: new { @class = "input-group-addon" })
+                <input type="text" ng-model="dados.pessoaNome" class="form-control" placeholder="Nome da pessoa" ng-change="dados.pessoaNome = dados.pessoaNome.toUpperCase()" required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.PessoaCpf, htmlAttributes: new { @class = "input-group-addon" })
+                <input type="text" ng-model="dados.pessoaCpf" class="form-control cpf" placeholder="insira o CPF" required ng-change="mudarCpf()" />
+            </div>
+        </div>
+
+        <div class="form-group" style="display: table">
+            <div class="input-group">
+                @Html.LabelFor(model => model.PessoaDataNascimento, htmlAttributes: new { @class = "input-group-addon" })
+                <input type="text" uib-datepicker-popup="dd/MM/yyyy" ng-init="popupDtNasc = {open:false}" is-open="popupDtNasc.open" ng-model="dados.pessoaDataNascimento" class="form-control data" placeholder="Insira a data de nascimento" ng-change="regra = doRegra();" required />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="popupDtNasc.open = true">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group alert alert-danger" ng-hide="regra">
+                <span class="glyphicon glyphicon-alert">A pessoa cadastrada precisa ser maior de 18 anos</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                @Html.LabelFor(model => model.UfCodigo, htmlAttributes: new { @class = "input-group-addon" })
+                <select class="form-control" ng-model="dados.uf" ng-options="item as item.ufNome for item in UF track by item.ufCodigo" ng-required="true" ng-change="dados.ufCodigo = dados.uf.ufCodigo" />
+            </div>
+        </div>
+
+        <div class="form-group" style="display: table">
+            <div class="input-group" ng-if="Cliente.ufCodigo === 'SC'">
+                <label class="input-group-addon">RG</label>
+                <input numero type="text" ng-model="dados.rg.rgNumero" class="form-control" placeholder="Número do RG" required style="max-width:122px" />
+                <input type="text" ng-model="dados.rg.rgOrgao" class="form-control" placeholder="Órgao expedidor" required style="max-width:137px" ng-change="dados.rg.rgOrgao = dados.rg.rgOrgao.toUpperCase()" />
+                <input type="text" ng-model="dados.rg.rgDataExpedicao" uib-datepicker-popup="dd/MM/yyyy" ng-init="popupDtExped = {open:false}" is-open="popupDtExped.open" class="form-control data" placeholder="Expedido em" required style="max-width:109px" />
+                <button type="button" class="btn btn-default" ng-click="popupDtExped.open = true">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+                <select class="form-control" ng-model="dados.rg.uf" ng-options="item as item.ufNome for item in UF track by item.ufCodigo" ng-change="dados.rg.ufCodigo = dados.rg.uf.ufCodigo" required>
+                    <option value="">UF</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Após inserir o telefone, clique no botão ao lado para salvar.
+            </label>
+            <div class="input-group">
+                <label class="input-group-addon glyphicon glyphicon-phone-alt"></label>
+                <input style="max-width: 56px" type="text" ng-model="telefoneTmp.telefoneDdd" class="form-control ddd" placeholder="DDD" maxlength="3" />
+                <input style="max-width: 103px" type="text" ng-model="telefoneTmp.telefoneNumero" class="form-control telefone" placeholder="Número" />
+                <select style="max-width: 140px;" class="form-control" ng-model="telefoneTmp.tipoTelefone" ng-options="tipo as tipo.tipoTelefoneDescricao for tipo in tipoTelefones track by tipo.tipoTelefoneCodigo" ng-change="telefoneTmp.tipoTelefoneCodigo = telefoneTmp.tipoTelefone.tipoTelefoneCodigo">
+                    <option value="">-- TIPO --</option>
+                </select>
+                <button class="btn btn-success   glyphicon glyphicon-floppy-save" type="button" ng-click="addTelefone()"></button>
+            </div>
+
+            <div class="input-group" ng-repeat="item in dados.telefones">
+                <label class="input-group-addon glyphicon glyphicon-phone-alt"></label>
+                <label class="input-group-addon" ng-hide="item.editar" ng-repeat="tipo in tipoTelefones|filter:item.tipoTelefoneCodigo">({{item.telefoneDdd}}) {{obterTelefoneFormatado(item.telefoneNumero)}} {{tipo.tipoTelefoneDescricao}}</label>
+                <input style="max-width: 56px" type="text" ng-model="item.telefoneDdd" class="form-control ddd" placeholder="DDD" maxlength="3" required ng-show="item.editar" />
+                <input style="max-width: 103px" type="text" ng-model="item.telefoneNumero" class="form-control telefone" placeholder="Número" required ng-show="item.editar" ng-change="item.telefoneNumero = item.telefoneNumero.replace(regexNaoNumerico,'')" />
+                <select style="max-width: 140px;" class="form-control" ng-options="tipo as tipo.tipoTelefoneDescricao for tipo in tipoTelefones track by tipo.tipoTelefoneCodigo" ng-model="item.tipoTelefone" ng-change="item.tipoTelefoneCodigo = item.tipoTelefone.tipoTelefoneCodigo" required ng-show="item.editar">
+                    <option value="">-- TIPO --</option>
+                </select>
+                <button class="btn btn-success glyphicon glyphicon-floppy-save" type="button" ng-show="item.editar" ng-click="item.editar = false"></button>
+                <button class="btn btn-primary glyphicon glyphicon-floppy-open" type="button" ng-hide="item.editar" ng-click="item.editar = true"></button>
+                <button class="btn btn-danger glyphicon glyphicon-floppy-remove" type="button" ng-hide="item.editar" ng-click="removerTelefone(item)"></button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <button class="btn btn-success" ng-if="dados.pessoaCodigo === undefined" ng-click="cadastrar()">Salvar</button>
+                <button class="btn btn-primary" ng-if="dados.pessoaCodigo !== undefined" ng-click="alterar()">Alterar</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script src="~/Scripts/view/Pessoa/config-jquery.js"></script>

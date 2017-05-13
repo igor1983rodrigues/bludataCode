@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" ng-app="appCadastro">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="~/Content/sigin.css" rel="stylesheet" />
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body ng-controller="LoginController">
+    <input id="root-path" type="hidden" value="~/" />
+    <div class="container">
+
+        <form class="form-signin">
+            <div class="panel panel-danger" ng-show="mensagem != undefined && mensagem != '' && mensagem != null">
+                <div class="panel-body bg-danger">
+                    <p ng-bind="mensagem"></p>
+                </div>
+            </div>
+            <h2 class="form-signin-heading">Por favor, entre</h2>
+            <label for="cnpj" class="sr-only">CNPJ do cliente</label>
+            <h2 class="form-signin-heading" ng-bind="dados.cnpj" ng-show="logando"></h2>
+            <input type="tel" id="cnpj" class="form-control cnpj" placeholder="CNPJ do cliente" ng-hide="logando" ng-model="dados.cnpj" required autofocus autocomplete="off">
+            <br />
+            <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="doLogin()" ng-hide="logando">Entrar</button>
+            <div class="progress" ng-show="logando">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only">100% Complete</span>
+                </div>
+            </div>
+        </form>
+
+    </div> <!-- /container -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/inputmask")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/setup.js")
+    <script src="~/Scripts/view/Principal/login-jquery.js"></script>
+    <script src="~/Scripts/view/Principal/login-angular.js"></script>
+</body>
+</html>
+

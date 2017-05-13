@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" ng-app="appCadastro">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Cadastro de pessoas - BLUDATA</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="navbar" ng-init="carregar()">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <i class="fa fa-home fa-lg"></i>
+                    <span>Cadastro</span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="item in navbar" ng-class="dropdown: item.subitens !== undefined">
+                        <a href="{{rootPath + item.link}}" rel="{{item.key}}" class="abrir-aba" ng-class="dropdown-toggle: item.subitens !== undefined" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa {{item.fa}} fa-lg"></i>
+                            <span ng-bind="item.label"></span>
+                            <span ng-if="item.subitens !== undefined" class="caret"></span>
+                        </a>
+                        <ul ng-if="item.subitens !== undefined" class="dropdown-menu">
+                            <li ng-repeat="sitem in item.subitens">
+                                <a href="{{rootPath + sitem.link}}" rel="{{sitem.key}}" class="abrir-aba" rel="">
+                                    <i class="fa {{sitem.fa}} fa-lg"></i>
+                                    <span ng-bind="sitem.label"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="principal" class="container theme-showcase">
+        <div id="tabs" class="container">
+            <br />
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active" role="presentation">
+                    <a href="#" rel="HomeTab">
+                        <i class="fa fa-home fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div id="conteudo" class="panel" ng-controller="ConteudoController" ng-init="carregarCliente(@ViewBag.Cliente)">
+            <div id="HomeTab">
+                <br />
+                <div class="jumbotron">
+                    <h1>Seja bem vindo!</h1>
+                    <p>Este sistema tem como objetivo o cadastro de pessoas</p>
+                    <p>Navegue pela barra de menus, e escolha sua opção.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <input type="hidden" id="root-path" value="~/" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/inputmask")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/configs.js")
+    <script src="~/Scripts/view/Principal/config-jquery.js"></script>
+    @*@RenderSection("scripts", required: false)*@
+</body>
+</html>

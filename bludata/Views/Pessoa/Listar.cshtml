@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="container" ng-controller="PessoaListarController">
+    <br />
+    <div id="pessoa-filtro" class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Filtro:</h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-group" style="float: left; margin: 5px;">
+                <label>Nome:</label>
+                <input class="form-control" type="text" ng-model="filtro.nome" />
+            </div>
+
+            <div class="form-group" style="float: left;margin: 5px;">
+                <label>CPF:</label>
+                <input class="form-control pessoa-lista-cpf" type="tel" ng-model="filtro.cpf" ng-change="retiraMascaraCpf()" />
+            </div>
+
+            <br style="clear: both" />
+
+            <div class="form-group" style="float: left; margin: 5px;">
+                <label>Data de Nascimento:</label>
+                <input class="form-control pessoa-lista-data" type="text" ng-model="filtro.dataNascimento" />
+            </div>
+
+            <div class="form-group" style="float: left;margin: 5px;">
+                <label>Data de Cadastro:</label>
+                <input class="form-control pessoa-lista-data" type="text" ng-model="filtro.dataCadastro" />
+            </div>
+
+            <div class="form-group" style="float: left;margin: 5px;">
+                <label style="height: 50%">&nbsp;</label>
+                <button class="btn btn-primary" type="button" ng-click="enviar()">
+                    <span class="glyphicon glyphicon-filter">Filtrar</span>
+                </button>
+            </div>
+
+            <br style="clear: both" />
+        </div>
+    </div>
+
+    <div id="pessoa-lista">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th colspan="2">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in pessoaCollection">
+                    <td>{{item.pessoaNome}}</td>
+                    <td>{{item.pessoaCpf}}</td>
+                    <td><button type="button" class="btn btn-success" ng-click="editar(item)"><i class="fa fa-edit"></i></button></td>
+                    <td><button type="button" class="btn btn-danger" ng-click="excluir(item.pessoaCodigo)"><i class="fa fa-remove"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.pessoa-lista-data').inputmask('99/99/9999');
+        $('.pessoa-lista-cpf').inputmask('999.999.999-99');
+    });
+</script>
